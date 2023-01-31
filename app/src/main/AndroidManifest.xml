@@ -12,12 +12,15 @@
         android:theme="@style/Theme.C196SchedulerNiermeyer"
         tools:targetApi="31">
         <activity
-            android:name=".activities.TermActivity"
+            android:name=".activities.TermDetails"
+            android:exported="false"
+            android:label="Term Details"
+            android:parentActivityName=".activities.TermList" />
+        <activity
+            android:name=".activities.TermList"
+            android:exported="false"
             android:label="Term List"
-            android:parentActivityName=".activities.MainActivity"
-            android:exported="false">
-
-        </activity>
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:exported="true">
