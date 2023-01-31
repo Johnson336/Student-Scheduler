@@ -1,29 +1,35 @@
 package wgu.c196.c196scheduler_niermeyer.components;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity(tableName="courses")
 public class Course {
+    @PrimaryKey(autoGenerate=true)
     private int id;
     private String title;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String startDate;
+    private String endDate;
     private String status;
-    private Mentor mentor;
     private String note;
-    private ArrayList<Assessment> assessments;
+    private int termID;
 
     public Course() {
 
     }
-    public Course(String title, LocalDate startDate, LocalDate endDate, String status, Mentor mentor, String note) {
+    public Course(String title, String startDate, String endDate, String status, String note) {
         this.id = 0;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
-        this.mentor = mentor;
         this.note = note;
+    }
+    public int getTermID() {
+        return termID;
+    }
+    public void setTermID(int termID) {
+        this.termID = termID;
     }
     // Setters
     public void setId(int i) {
@@ -32,17 +38,14 @@ public class Course {
     public void setTitle(String title) {
         this.title = title;
     }
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
     public void setStatus(String status) {
         this.status = status;
-    }
-    public void setMentor(Mentor mentor) {
-        this.mentor = mentor;
     }
     public void setNote(String note) {
         this.note = note;
@@ -54,31 +57,16 @@ public class Course {
     public String getTitle() {
         return this.title;
     }
-    public LocalDate getStartDate() {
+    public String getStartDate() {
         return this.startDate;
     }
-    public LocalDate getEndDate() {
+    public String getEndDate() {
         return this.endDate;
     }
     public String getStatus() {
         return this.status;
     }
-    public Mentor getMentor() {
-        return this.mentor;
-    }
     public String getNote() {
         return this.note;
-    }
-    public ArrayList<Assessment> getAssessments() {
-        return this.assessments;
-    }
-    public boolean addAssessment(Assessment a) {
-        return assessments.add(a);
-    }
-    public boolean removeAssessment(Assessment a) {
-        return assessments.remove(a);
-    }
-    public void clearAssessments() {
-        this.assessments.clear();
     }
 }
