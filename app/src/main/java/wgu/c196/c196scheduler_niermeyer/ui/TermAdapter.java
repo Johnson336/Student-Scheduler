@@ -2,16 +2,14 @@ package wgu.c196.c196scheduler_niermeyer.ui;
 
 import static android.content.ContentValues.TAG;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,11 +19,7 @@ import java.util.List;
 
 import wgu.c196.c196scheduler_niermeyer.R;
 import wgu.c196.c196scheduler_niermeyer.activities.CourseList;
-import wgu.c196.c196scheduler_niermeyer.components.Course;
 import wgu.c196.c196scheduler_niermeyer.components.Term;
-import wgu.c196.c196scheduler_niermeyer.database.Repository;
-import wgu.c196.c196scheduler_niermeyer.models.TermViewModel;
-
 
 public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder> {
     private List<Term> mTerms;
@@ -49,30 +43,20 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
                     int position = getAdapterPosition();
                     final Term cur = mTerms.get(position);
                     /**
-                     * Term Data passed into Course List form
+                     *  Update Term Data in Preferences
                      */
+                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor prefEdit = pref.edit();
+                    prefEdit.putInt("termId", cur.getId());
+                    prefEdit.putString("termName", cur.getName());
+                    prefEdit.putString("termStart", cur.getStartDate());
+                    prefEdit.putString("termEnd", cur.getEndDate());
+                    prefEdit.apply();
                     Intent intent = new Intent(context, CourseList.class);
-                    intent.putExtra("tId", cur.getId());
-                    intent.putExtra("tName", cur.getName());
-                    intent.putExtra("tStartDate", cur.getStartDate());
-                    intent.putExtra("tEndDate", cur.getEndDate());
                     context.startActivity(intent);
 
                 }
             });
-
-            /*
-            termDeleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // final Term cur = mTerms.get(getAdapterPosition());
-                    // mTerms.remove(cur);
-                    // repo.delete(cur);
-                    // removeItem(getAdapterPosition());
-                }
-            });
-
-             */
         }
 
         public void bind(String text) {

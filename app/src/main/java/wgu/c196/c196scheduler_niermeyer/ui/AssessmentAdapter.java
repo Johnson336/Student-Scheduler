@@ -1,11 +1,9 @@
 package wgu.c196.c196scheduler_niermeyer.ui;
 
-import static android.content.ContentValues.TAG;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Locale;
 
 import wgu.c196.c196scheduler_niermeyer.R;
 import wgu.c196.c196scheduler_niermeyer.activities.AssessmentDetails;
-import wgu.c196.c196scheduler_niermeyer.activities.AssessmentList;
 import wgu.c196.c196scheduler_niermeyer.components.Assessment;
 import wgu.c196.c196scheduler_niermeyer.components.Course;
 import wgu.c196.c196scheduler_niermeyer.components.Term;
@@ -49,47 +47,19 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
                     int position = getAdapterPosition();
                     final Assessment cur = mAssessments.get(position);
                     /**
-                     * Assessment Data passed into assessment detail form
+                     *  Update Assessment Data in Preferences
                      */
+                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor prefEdit = pref.edit();
+                    prefEdit.putInt("assessmentId", cur.getId());
+                    prefEdit.putString("assessmentTitle", cur.getTitle());
+                    prefEdit.putString("assessmentStart", cur.getStartDate());
+                    prefEdit.putString("assessmentEnd", cur.getEndDate());
+                    prefEdit.apply();
                     Intent intent = new Intent(context, AssessmentDetails.class);
-                    intent.putExtra("aId", cur.getId());
-                    intent.putExtra("aTitle", cur.getTitle());
-                    intent.putExtra("aStartDate", cur.getStartDate());
-                    intent.putExtra("aEndDate", cur.getEndDate());
-                    // forward on course data
-                    intent.putExtra("cId", cur.getCourseID());
-                    intent.putExtra("cTitle", intent.getStringExtra("cTitle"));
-                    intent.putExtra("cStart", intent.getStringExtra("cStart"));
-                    intent.putExtra("cEnd", intent.getStringExtra("cEnd"));
-                    intent.putExtra("cStatus", intent.getStringExtra("cStatus"));
-                    intent.putExtra("cNote", intent.getStringExtra("cNote"));
-                    intent.putExtra("cInstructorName", intent.getStringExtra("cInstructorName"));
-                    intent.putExtra("cInstructorPhone", intent.getStringExtra("cInstructorPhone"));
-                    intent.putExtra("cInstructorEmail", intent.getStringExtra("cInstructorEmail"));
-                    // forward on term data
-                    intent.putExtra("tId", intent.getIntExtra("tId", 0));
-                    intent.putExtra("tName", intent.getStringExtra("tName"));
-                    intent.putExtra("tStart", intent.getStringExtra("tStart"));
-                    intent.putExtra("tEnd", intent.getStringExtra("tEnd"));
-
-
-
                     context.startActivity(intent);
-
                 }
             });
-
-            /*
-            assessmentDeleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final Assessment cur = mAssessments.get(getAdapterPosition());
-                    mAssessments.remove(cur);
-                    notifyDataSetChanged();
-                }
-            });
-
-             */
         }
 
         public void bind(String text) {

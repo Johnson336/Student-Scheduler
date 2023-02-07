@@ -27,9 +27,11 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import wgu.c196.c196scheduler_niermeyer.R;
 import wgu.c196.c196scheduler_niermeyer.components.Assessment;
+import wgu.c196.c196scheduler_niermeyer.components.Course;
 import wgu.c196.c196scheduler_niermeyer.components.Term;
 import wgu.c196.c196scheduler_niermeyer.database.Repository;
 import wgu.c196.c196scheduler_niermeyer.models.TermViewModel;
@@ -77,11 +79,20 @@ public class TermList extends AppCompatActivity {
                                           int direction) {
                         int position = viewHolder.getAdapterPosition();
                         Term thisTerm = termAdapter.getTermAtPosition(position);
-                        Toast.makeText(TermList.this, "Deleting " +
-                                thisTerm.toString(), Toast.LENGTH_LONG).show();
+                        ArrayList<Course> termCourses = new ArrayList<>(repo.getCoursesByTermID(thisTerm.getId()));
+                        if (termCourses.size() != 0) {
+                            Toast.makeText(TermList.this, String.format(Locale.US,
+                                    "Unable to delete %s, %d courses are assigned.",
+                                    thisTerm.getName(),
+                                    termCourses.size()), Toast.LENGTH_LONG).show();
+                            termAdapter.notifyItemChanged(position);
+                        } else {
+                            Toast.makeText(TermList.this, "Deleting " +
+                                    thisTerm.getName(), Toast.LENGTH_LONG).show();
 
-                        // Delete the term
-                        mTermViewModel.delete(thisTerm);
+                            // Delete the term
+                            mTermViewModel.delete(thisTerm);
+                        }
                     }
                 });
         helper.attachToRecyclerView(recyclerView);

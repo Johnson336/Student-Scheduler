@@ -21,7 +21,7 @@ public interface TermDAO {
     @Query("SELECT * FROM terms ORDER BY id ASC")
     LiveData<List<Term>> getAllTerms();
     @Query("SELECT * from terms WHERE id = :id")
-    public LiveData<Term> getTermByID(int id);
+    Term getTermByID(int id);
     @Delete
     void delete(Term term);
     @Query("DELETE FROM terms")

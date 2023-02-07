@@ -19,13 +19,14 @@ public interface AssessmentDAO {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(Assessment assessment);
     @Query("SELECT * FROM assessments ORDER BY id ASC")
-    LiveData<List<Assessment>> getAllAssessments();
+    List<Assessment> getAllAssessments();
     @Query("SELECT * FROM assessments WHERE courseID = :courseID ORDER BY id ASC")
-    LiveData<List<Assessment>> getAllAssessmentsByCourseID(int courseID);
+    List<Assessment> getAllAssessmentsByCourseID(int courseID);
     @Query("SELECT * FROM assessments WHERE id = :assessmentID")
-    LiveData<Assessment> getAssessmentByID(int assessmentID);
+    Assessment getAssessmentByID(int assessmentID);
     @Delete
     void delete(Assessment assessment);
     @Query("DELETE FROM terms")
     void deleteAll();
+
 }

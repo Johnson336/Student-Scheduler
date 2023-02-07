@@ -5,11 +5,12 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -50,13 +51,20 @@ public class AssessmentDetails extends AppCompatActivity {
         assessmentStart = findViewById(R.id.editText_assessment_detail_start);
         assessmentEnd = findViewById(R.id.editText_assessment_detail_end);
         assessmentSave = findViewById(R.id.button_assessment_save);
-        int id = getIntent().getIntExtra("aId", 0);
-        String title = getIntent().getStringExtra("aTitle");
-        String start = getIntent().getStringExtra("aStart");
-        String end = getIntent().getStringExtra("aEnd");
-        assessmentTitle.setText((title!=null ? title : ""));
-        assessmentStart.setText((start!=null ? start : ""));
-        assessmentEnd.setText((start!=null ? end : ""));
+
+        /**
+         * Retrieve Assessment data from preferences
+         */
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        int aId = pref.getInt("assessmentId", 0);
+        String aTitle = pref.getString("assessmentTitle", null);
+        String aStart = pref.getString("assessmentStart", null);
+        String aEnd = pref.getString("assessmentEnd", null);
+        int cId = pref.getInt("courseId", 0);
+
+        assessmentTitle.setText((aTitle!=null ? aTitle : ""));
+        assessmentStart.setText((aStart!=null ? aStart : ""));
+        assessmentEnd.setText((aEnd!=null ? aEnd : ""));
 
         assessmentStart.setOnClickListener(v-> {
             String info = assessmentStart.getText().toString();
@@ -72,6 +80,8 @@ public class AssessmentDetails extends AppCompatActivity {
             calStart.set(Calendar.YEAR, year);
             calStart.set(Calendar.MONTH, monthOfYear);
             calStart.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+            assessmentStart.setText(sDateFormat.format(calStart.getTime()));
         };
         assessmentEnd.setOnClickListener(v -> {
             String info = assessmentEnd.getText().toString();
@@ -93,13 +103,14 @@ public class AssessmentDetails extends AppCompatActivity {
 
         assessmentSave.setOnClickListener(v -> {
             Assessment newAssessment = new Assessment(assessmentTitle.getText().toString(), assessmentStart.getText().toString(), assessmentEnd.getText().toString());
-            if (id != 0) {
-                newAssessment.setId(id);
+            newAssessment.setCourseID(cId);
+            if (aId != 0) {
+                newAssessment.setId(aId);
                 repo.update(newAssessment);
             } else {
                 repo.insert(newAssessment);
             }
-            Toast.makeText(getApplicationContext(), String.format("Assessment has been %s.", (id == 0) ? "added" : "updated"), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), String.format("Assessment has been %s.", (aId == 0) ? "added" : "updated"), Toast.LENGTH_LONG).show();
         });
     }
 
@@ -117,10 +128,12 @@ public class AssessmentDetails extends AppCompatActivity {
                     newDate = sDateFormat.parse(date);
                 } catch (ParseException e) {
                     e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Unable to add notification, invalid date.", Toast.LENGTH_LONG).show();
+                    break;
                 }
                 Long trigger = newDate.getTime();
                 Intent intent = new Intent(AssessmentDetails.this, NotificationReceiver.class);
-                intent.putExtra("key", assessmentTitle.getText().toString() + " begins today!");
+                intent.putExtra("key", String.format(Locale.US, "%s ends on %s!", assessmentTitle.getText().toString(),assessmentStart.getText().toString()));
                 PendingIntent sender = PendingIntent.getBroadcast(AssessmentDetails.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
                 AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 manager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
@@ -132,10 +145,12 @@ public class AssessmentDetails extends AppCompatActivity {
                     newDate = sDateFormat.parse(date);
                 } catch (ParseException e) {
                     e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Unable to add notification, invalid date.", Toast.LENGTH_LONG).show();
+                    break;
                 }
                 trigger = newDate.getTime();
                 intent = new Intent(AssessmentDetails.this, NotificationReceiver.class);
-                intent.putExtra("key", assessmentTitle.getText().toString() + " ends today!");
+                intent.putExtra("key", String.format(Locale.US, "%s ends on %s!", assessmentTitle.getText().toString(),assessmentEnd.getText().toString()));
                 sender = PendingIntent.getBroadcast(AssessmentDetails.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
                 manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 manager.set(AlarmManager.RTC_WAKEUP, trigger, sender);

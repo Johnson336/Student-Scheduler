@@ -34,7 +34,7 @@ public abstract class DatabaseBuilder extends RoomDatabase {
                 if (INSTANCE==null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), DatabaseBuilder.class, "C196Database.db")
                             .fallbackToDestructiveMigration()
-                            // .allowMainThreadQueries()
+                            .allowMainThreadQueries()
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }

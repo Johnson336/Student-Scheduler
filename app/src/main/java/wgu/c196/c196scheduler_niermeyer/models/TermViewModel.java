@@ -24,7 +24,7 @@ public class TermViewModel extends AndroidViewModel {
     public void update(Term term) { mRepository.update(term); }
     public LiveData<List<Term>> getAllTerms() { return mAllTerms; }
 
-    public LiveData<Term> getTermByID(int i) { return mRepository.getTermByID(i); }
+    public Term getTermByID(int i) { return mRepository.getTermByID(i); }
     public void delete(Term term) { mRepository.delete(term); }
     public void deleteAll() { mRepository.deleteAllTerms(); }
 

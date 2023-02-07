@@ -7,7 +7,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +28,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -76,10 +79,35 @@ public class AssessmentList extends AppCompatActivity {
 
         mAssessmentViewModel = new ViewModelProvider(this).get(AssessmentViewModel.class);
 
-        mAssessmentViewModel.getAllAssessments().observe(this, assessmentAdapter::setAssessments);
+        /**
+         * Retrieve Course data from preferences
+         */
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        int cId = pref.getInt("courseId", 0);
+        String cTitle = pref.getString("courseTitle", null);
+        String cStart = pref.getString("courseStart", null);
+        String cEnd = pref.getString("courseEnd", null);
+        String cStatus = pref.getString("courseStatus", null);
+        String cNote = pref.getString("courseNote", null);
+        String cInstName = pref.getString("courseInstName", null);
+        String cInstPhone = pref.getString("courseInstPhone", null);
+        String cInstEmail = pref.getString("courseInstEmail", null);
+        int tId = pref.getInt("termId", 0);
 
-        LiveData<List<Assessment>> allAssessments = repo.getAllAssessments();
-        assessmentAdapter.setAssessments(allAssessments.getValue());
+        List<Assessment> allAssessments = repo.getAllAssessments();
+        // assessmentAdapter.setAssessments(allAssessments);
+
+        /**
+         * ArrayList Used to filter assessments by CourseID
+         */
+
+        ArrayList<Assessment> filteredAssessments = new ArrayList<>();
+        for (Assessment a : allAssessments) {
+            if (a.getCourseID() == cId) {
+                filteredAssessments.add(a);
+            }
+        }
+        assessmentAdapter.setAssessments(filteredAssessments);
 
         // Add functionality to swipe items in the recyclerview to delete that item
         ItemTouchHelper helper = new ItemTouchHelper(
@@ -102,6 +130,8 @@ public class AssessmentList extends AppCompatActivity {
 
                         // Delete the term
                         mAssessmentViewModel.delete(thisAssessment);
+                        filteredAssessments.remove(thisAssessment);
+                        assessmentAdapter.notifyItemRemoved(position);
                     }
                 });
         helper.attachToRecyclerView(recyclerView);
@@ -115,27 +145,15 @@ public class AssessmentList extends AppCompatActivity {
         instructorPhone = findViewById(R.id.editText_course_instructor_phone);
         instructorEmail = findViewById(R.id.editText_course_instructor_email);
         courseSave = findViewById(R.id.button_course_save);
-        int cId = getIntent().getIntExtra("cId", 0);
-        String cTitle = getIntent().getStringExtra("cTitle");
-        String cStart = getIntent().getStringExtra("cStartDate");
-        String cEnd = getIntent().getStringExtra("cEndDate");
-        String cStatus = getIntent().getStringExtra("cStatus");
-        String cNote = getIntent().getStringExtra("cNote");
-        String cIName = getIntent().getStringExtra("cInstructorName");
-        String cIPhone = getIntent().getStringExtra("cInstructorPhone");
-        String cIEmail = getIntent().getStringExtra("cInstructorEmail");
-        int termID = getIntent().getIntExtra("tId", 0);
-        String termName = getIntent().getStringExtra("tName");
-        String termStart = getIntent().getStringExtra("tStart");
-        String termEnd = getIntent().getStringExtra("tEnd");
+
         courseTitle.setText((cTitle!=null? cTitle : ""));
         courseStart.setText((cStart!=null ? cStart : ""));
         courseEnd.setText((cEnd!=null ? cEnd : ""));
         courseStatus.setText((cStatus!=null ? cStatus : ""));
         courseNote.setText((cNote!=null ? cNote : ""));
-        instructorName.setText((cIName!=null ? cIName : ""));
-        instructorPhone.setText((cIPhone!=null ? cIPhone : ""));
-        instructorEmail.setText((cIEmail!=null ? cIEmail : ""));
+        instructorName.setText((cInstName!=null ? cInstName : ""));
+        instructorPhone.setText((cInstPhone!=null ? cInstPhone : ""));
+        instructorEmail.setText((cInstEmail!=null ? cInstEmail : ""));
 
         /*
          * Course Start Date datePicker callback
@@ -196,6 +214,7 @@ public class AssessmentList extends AppCompatActivity {
             if (!instructorEmail.getText().toString().isEmpty()) {
                 course.setInstructorEmail(instructorEmail.getText().toString());
             }
+            course.setTermID(tId);
             if (cId != 0) {
                 course.setId(cId);
                 repo.update(course);
@@ -203,15 +222,6 @@ public class AssessmentList extends AppCompatActivity {
                 repo.insert(course);
             }
             Toast.makeText(getApplicationContext(), String.format("Course has been %s.", (cId == 0) ? "added" : "updated"), Toast.LENGTH_LONG).show();
-
-            /* Context context = getApplicationContext();
-            Intent intent = new Intent(context, CourseList.class);
-            intent.putExtra("tId", termID);
-            intent.putExtra("tName", termName);
-            intent.putExtra("tStart", termStart);
-            intent.putExtra("tEnd", termEnd);
-            context.startActivity(intent);
-            // finish(); */
         });
 
 
@@ -233,6 +243,9 @@ public class AssessmentList extends AppCompatActivity {
                     Assessment newAssessment = new Assessment(input.getText().toString(), "", "");
                     newAssessment.setCourseID(cId);
                     repo.insert(newAssessment);
+                    List<Assessment> filteredAssessments = repo.getAssessmentsByCourseID(cId);
+                    assessmentAdapter.setAssessments(filteredAssessments);
+                    assessmentAdapter.notifyItemInserted(filteredAssessments.size());
                 }
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -264,10 +277,12 @@ public class AssessmentList extends AppCompatActivity {
                     newDate = sDateFormat.parse(date);
                 } catch (ParseException e) {
                     e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Unable to add notification, invalid date.", Toast.LENGTH_LONG).show();
+                    break;
                 }
                 Long trigger = newDate.getTime();
                 Intent intent = new Intent(AssessmentList.this, NotificationReceiver.class);
-                intent.putExtra("key", courseTitle.getText().toString() + " begins today!");
+                intent.putExtra("key", String.format(Locale.US, "%s begins on %s!", courseTitle.getText().toString(),courseStart.getText().toString()));
                 PendingIntent sender = PendingIntent.getBroadcast(AssessmentList.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
                 AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 manager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
@@ -279,10 +294,12 @@ public class AssessmentList extends AppCompatActivity {
                     newDate = sDateFormat.parse(date);
                 } catch (ParseException e) {
                     e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Unable to add notification, invalid date.", Toast.LENGTH_LONG).show();
+                    break;
                 }
                 trigger = newDate.getTime();
                 intent = new Intent(AssessmentList.this, NotificationReceiver.class);
-                intent.putExtra("key", courseTitle.getText().toString() + " ends today!");
+                intent.putExtra("key", String.format(Locale.US, "%s ends on %s!", courseTitle.getText().toString(),courseEnd.getText().toString()));
                 sender = PendingIntent.getBroadcast(AssessmentList.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
                 manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 manager.set(AlarmManager.RTC_WAKEUP, trigger, sender);

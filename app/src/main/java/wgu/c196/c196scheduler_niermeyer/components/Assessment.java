@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Locale;
+
 @Entity(tableName="assessments")
 public class Assessment {
     @PrimaryKey(autoGenerate=true)
@@ -25,7 +27,7 @@ public class Assessment {
     @NonNull
     @Override
     public String toString() {
-        return this.title;
+        return String.format(Locale.US, "%d: %s (%d)", this.id, this.title, this.courseID);
     }
     public int getCourseID() {
         return courseID;

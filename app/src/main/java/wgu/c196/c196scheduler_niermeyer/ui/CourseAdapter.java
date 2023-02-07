@@ -2,26 +2,23 @@ package wgu.c196.c196scheduler_niermeyer.ui;
 
 import static android.content.ContentValues.TAG;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import wgu.c196.c196scheduler_niermeyer.R;
 import wgu.c196.c196scheduler_niermeyer.activities.AssessmentList;
-import wgu.c196.c196scheduler_niermeyer.activities.CourseList;
 import wgu.c196.c196scheduler_niermeyer.components.Course;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
@@ -44,28 +41,23 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    final Course curCourse = mCourses.get(position);
+                    final Course cur = mCourses.get(position);
                     /**
-                     * Course Data passed into assessment list form
+                     *  Update Course Data in Preferences
                      */
+                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor prefEdit = pref.edit();
+                    prefEdit.putInt("courseId", cur.getId());
+                    prefEdit.putString("courseTitle", cur.getTitle());
+                    prefEdit.putString("courseStart", cur.getStartDate());
+                    prefEdit.putString("courseEnd", cur.getEndDate());
+                    prefEdit.putString("courseStatus", cur.getStatus());
+                    prefEdit.putString("courseNote", cur.getNote());
+                    prefEdit.putString("courseInstName", cur.getInstructorName());
+                    prefEdit.putString("courseInstPhone", cur.getInstructorPhone());
+                    prefEdit.putString("courseInstEmail", cur.getInstructorEmail());
+                    prefEdit.apply();
                     Intent intent = new Intent(context, AssessmentList.class);
-                    intent.putExtra("cId", curCourse.getId());
-                    intent.putExtra("cTitle", curCourse.getTitle());
-                    intent.putExtra("cStartDate", curCourse.getStartDate());
-                    intent.putExtra("cEndDate", curCourse.getEndDate());
-                    intent.putExtra("cStatus", curCourse.getStatus());
-                    intent.putExtra("cNote", curCourse.getNote());
-                    intent.putExtra("cInstructorName", curCourse.getInstructorName());
-                    intent.putExtra("cInstructorPhone", curCourse.getInstructorPhone());
-                    intent.putExtra("cInstructorEmail", curCourse.getInstructorEmail());
-                    intent.putExtra("tId", curCourse.getTermID());
-                    // intent.putExtra("tId", intent.getStringExtra("tId"));
-                    intent.putExtra("tName", intent.getStringExtra("tName"));
-                    intent.putExtra("tStart", intent.getStringExtra("tStart"));
-                    intent.putExtra("tEnd", intent.getStringExtra("tEnd"));
-                    /**
-                     * Term Data passed into assessment list form
-                     */
                     context.startActivity(intent);
                 }
             });
@@ -105,7 +97,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     public void onBindViewHolder(@NonNull CourseAdapter.CourseViewHolder holder, int position) {
         if (mCourses != null) {
             Course cur = mCourses.get(position);
-            holder.bind(cur.toString());
+            holder.bind(cur.getTitle());
         } else {
             holder.bind("No courses found.");
         }
@@ -129,13 +121,4 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         return mCourses.get(position);
     }
 
-    public List<Course> getCoursesFromTermID(int termId) {
-        ArrayList<Course> filteredCourses = new ArrayList<>();
-        for (Course c : mCourses) {
-            if (c.getTermID() == termId) {
-                filteredCourses.add(c);
-            }
-        }
-        return filteredCourses;
-    }
 }

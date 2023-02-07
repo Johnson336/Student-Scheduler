@@ -19,13 +19,15 @@ public interface CourseDAO {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(Course course);
     @Query("SELECT * FROM courses ORDER BY id ASC")
-    LiveData<List<Course>> getAllCourses();
+    List<Course> getAllCourses();
     @Query("SELECT * FROM courses WHERE termID = :termID ORDER BY id ASC")
-    LiveData<List<Course>> getAllCoursesByTermID(int termID);
+    List<Course> getCoursesByTermID(int termID);
     @Query("SELECT * FROM courses WHERE id = :courseID")
-    LiveData<Course> getCourseByID(int courseID);
+    Course getCourseByID(int courseID);
     @Delete
     void delete(Course course);
     @Query("DELETE FROM terms")
     void deleteAll();
+
+
 }

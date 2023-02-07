@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Locale;
+
 @Entity(tableName="terms")
 public class Term {
     @PrimaryKey(autoGenerate=true)
@@ -24,7 +26,7 @@ public class Term {
     @NonNull
     @Override
     public String toString() {
-        return String.format("%d: %s", this.id, this.name);
+        return String.format(Locale.US, "%d: %s", this.id, this.name);
     }
     // Setters
     public void setId(int i) {

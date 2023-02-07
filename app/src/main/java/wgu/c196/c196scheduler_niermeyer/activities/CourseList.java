@@ -14,7 +14,9 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -57,10 +59,6 @@ public class CourseList extends AppCompatActivity {
     private Button termSave;
     private CourseViewModel mCourseViewModel;
     private RecyclerView recyclerView;
-    private int cTermId;
-    private String cTermName;
-    private String cTermStart;
-    private String cTermEnd;
     private Repository repo;
 
     @Override
@@ -78,18 +76,27 @@ public class CourseList extends AppCompatActivity {
 
         mCourseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
 
-        mCourseViewModel.getAllCourses().observe(this, courseAdapter::setCourses);
+        /**
+         * Retrieve Course data from preferences
+         */
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        int tId = pref.getInt("termId", 0);
+        String tName = pref.getString("termName", null);
+        String tStart = pref.getString("termStart", null);
+        String tEnd = pref.getString("termEnd", null);
 
-        LiveData<List<Course>> allCourses = repo.getAllCourses();
-        courseAdapter.setCourses(allCourses.getValue());
-
-        int termId = getIntent().getIntExtra("tId", 0);
-        LiveData<List<Course>> filteredCourses = repo.getCoursesByTermID(termId);
-
-        if (filteredCourses != null) {
-            courseAdapter.setCourses(filteredCourses.getValue());
+        List<Course> allCourses = repo.getAllCourses();
+        /*
+        ArrayList<Course> filteredCourses = new ArrayList<>();
+        for (Course c : allCourses) {
+            if (c.getTermID() == tId) {
+                filteredCourses.add(c);
+            }
         }
-
+        courseAdapter.setCourses(filteredCourses);
+         */
+        List<Course> filteredCourses = repo.getCoursesByTermID(tId);
+        courseAdapter.setCourses(filteredCourses);
 
         // Add functionality to swipe items in the recyclerview to delete that item
         ItemTouchHelper helper = new ItemTouchHelper(
@@ -112,6 +119,8 @@ public class CourseList extends AppCompatActivity {
 
                         // Delete the term
                         mCourseViewModel.delete(thisCourse);
+                        filteredCourses.remove(thisCourse);
+                        courseAdapter.notifyDataSetChanged();
                     }
                 });
         helper.attachToRecyclerView(recyclerView);
@@ -120,30 +129,11 @@ public class CourseList extends AppCompatActivity {
         termStart = findViewById(R.id.editText_term_detail_start);
         termEnd = findViewById(R.id.editText_term_detail_end);
         termSave = findViewById(R.id.button_term_save);
-        // Term ID passed in from TermList form
-        // Or from savedInstanceState if we pressed back
-        /*
-        if (savedInstanceState != null) {
-            Toast.makeText(this, "Loading instance.", Toast.LENGTH_LONG).show();
-            cTermId = savedInstanceState.getInt("tId");
-            cTermName = savedInstanceState.getString("tName");
-            cTermStart = savedInstanceState.getString("tStartDate");
-            cTermEnd = savedInstanceState.getString("tEndDate");
-            termName.setText(cTermName);
-            termStart.setText(cTermStart);
-            termEnd.setText(cTermEnd);
-        } else {
 
-         */
-        cTermId = getIntent().getIntExtra("tId", 0);
-        cTermName = getIntent().getStringExtra("tName");
-        cTermStart = getIntent().getStringExtra("tStartDate");
-        cTermEnd = getIntent().getStringExtra("tEndDate");
-        termName.setText((cTermName != null ? cTermName : ""));
-        termStart.setText((cTermStart != null ? cTermStart : ""));
-        termEnd.setText((cTermEnd != null ? cTermEnd : ""));
-        System.err.println("Term ID passed in: " + cTermId);
-        // }
+        termName.setText((tName != null ? tName : ""));
+        termStart.setText((tStart != null ? tStart : ""));
+        termEnd.setText((tEnd != null ? tEnd : ""));
+
 
 
         termStart.setOnClickListener(v -> {
@@ -183,13 +173,13 @@ public class CourseList extends AppCompatActivity {
 
         termSave.setOnClickListener(v -> {
             Term newTerm = new Term(termName.getText().toString(), termStart.getText().toString(), termEnd.getText().toString());
-            if (cTermId != 0) {
-                newTerm.setId(cTermId);
+            if (tId != 0) {
+                newTerm.setId(tId);
                 repo.update(newTerm);
             } else {
                 repo.insert(newTerm);
             }
-            Toast.makeText(getApplicationContext(), String.format("Term has been %s.", (cTermId == 0) ? "added" : "updated"), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), String.format("Term has been %s.", (tId == 0) ? "added" : "updated"), Toast.LENGTH_LONG).show();
         });
 
 
@@ -209,8 +199,11 @@ public class CourseList extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Course newCourse = new Course(input.getText().toString(), "", "", "", "");
-                    newCourse.setTermID(cTermId);
+                    newCourse.setTermID(tId);
                     repo.insert(newCourse);
+                    List<Course> filteredCourses = repo.getCoursesByTermID(tId);
+                    courseAdapter.setCourses(filteredCourses);
+                    courseAdapter.notifyItemInserted(filteredCourses.size());
                 }
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -218,27 +211,4 @@ public class CourseList extends AppCompatActivity {
 
         });
     }
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putInt("tId", cTermId);
-        outState.putString("tName", cTermName);
-        outState.putString("tStart", cTermStart);
-        outState.putString("tEnd", cTermEnd);
-        super.onSaveInstanceState(outState);
-    }
-
-
-
-    /**
-    @Override
-    protected void onResume() {
-        super.onResume();
-        LiveData<List<Course>> allCourses = repo.getAllCourses();
-        RecyclerView recyclerView = findViewById(R.id.recyclerView_courseList);
-        final CourseAdapter courseAdapter = new CourseAdapter(this);
-        recyclerView.setAdapter(courseAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        courseAdapter.setCourses(allCourses.getValue());
-    }
-    */
 }
