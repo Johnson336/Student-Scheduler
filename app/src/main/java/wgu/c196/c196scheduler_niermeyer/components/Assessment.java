@@ -1,5 +1,6 @@
 package wgu.c196.c196scheduler_niermeyer.components;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -20,6 +21,11 @@ public class Assessment {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+    @NonNull
+    @Override
+    public String toString() {
+        return this.title;
     }
     public int getCourseID() {
         return courseID;

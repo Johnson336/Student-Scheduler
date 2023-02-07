@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The default font for RecyclerView items is too small.
+    The margin is a simple delimiter between the words. -->
+    <style name="list_item">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@color/colorSecondary</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:fontFamily">roboto_mono</item>
+        <item name="android:paddingVertical">10dp</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Material.Subhead</item>
+    </style>
+    <style name="list_icon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@color/colorSecondary</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Material.Headline</item>
+    </style>
+    <style name="item_header">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">2dp</item>
+        <item name="android:paddingEnd">15dp</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:fontFamily">roboto_mono</item>
+        <item name="android:paddingVertical">10dp</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Material.Headline</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:gravity">right</item>
+    </style>
+</resources>

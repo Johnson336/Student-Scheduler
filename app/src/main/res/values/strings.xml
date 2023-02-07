@@ -1,3 +1,36 @@
 <resources>
     <string name="app_name">C196 Scheduler - Niermeyer</string>
+    <string name="add_term_word">Add a new Term</string>
+    <string name="term_name">Term Name</string>
+    <string name="term_start">Term Start</string>
+    <string name="term_end">Term End</string>
+    <string name="empty_not_saved">Please enter a term name.</string>
+    <string name="start">Start:</string>
+    <string name="end">End:</string>
+    <string name="course_detail_title">Course Title</string>
+    <string name="course_detail_start">Course Start</string>
+    <string name="course_detail_end">Course End</string>
+    <string name="course_detail_status">Course Status</string>
+    <string name="course_detail_note">Course Note</string>
+    <string name="course_detail_instructor_name">Instructor Name</string>
+    <string name="course_detail_instructor_phone">Instructor Phone</string>
+    <string name="course_detail_instructor_email">Instructor Email</string>
+    <string name="course_detail_assessments">Assessments</string>
+    <string name="course_detail_save">Save Course</string>
+    <string name="course_detail_new_assessment">New Assessment</string>
+    <string name="assessment_detail_button">Assessment Detail</string>
+    <string name="assessment_delete_button">Assessment Delete</string>
+    <string name="channel_name">C196 Scheduler Channel</string>
+    <string name="channel_description">Notifications for C196 Scheduler App</string>
+    <string name="new_term">New Term</string>
+    <string name="delete_term">Delete Term</string>
+    <string name="delete_a_term">Delete a term</string>
+    <string name="add_course_word">Add a course</string>
+    <string name="new_course">Add Course</string>
+    <string name="delete_a_course">Delete a course</string>
+    <string name="delete_course">Delete Course</string>
+    <string name="add_assessment_word">Add an assessment</string>
+    <string name="new_assessment">Add Assessment</string>
+    <string name="delete_assessment_word">Delete an assessment</string>
+    <string name="delete_assessment">Delete Assessment</string>
 </resources>

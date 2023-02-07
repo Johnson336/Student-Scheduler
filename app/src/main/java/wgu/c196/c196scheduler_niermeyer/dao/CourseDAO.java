@@ -1,5 +1,6 @@
 package wgu.c196.c196scheduler_niermeyer.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -7,7 +8,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import wgu.c196.c196scheduler_niermeyer.components.Course;
@@ -16,12 +16,16 @@ import wgu.c196.c196scheduler_niermeyer.components.Course;
 public interface CourseDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Course course);
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(Course course);
+    @Query("SELECT * FROM courses ORDER BY id ASC")
+    LiveData<List<Course>> getAllCourses();
+    @Query("SELECT * FROM courses WHERE termID = :termID ORDER BY id ASC")
+    LiveData<List<Course>> getAllCoursesByTermID(int termID);
+    @Query("SELECT * FROM courses WHERE id = :courseID")
+    LiveData<Course> getCourseByID(int courseID);
     @Delete
     void delete(Course course);
-    @Query("SELECT * FROM courses ORDER BY id ASC")
-    List<Course> getAllCourses();
-    @Query("SELECT * FROM courses WHERE termID = :termID ORDER BY id ASC")
-    List<Course> getAllAssociatedCourses(int termID);
+    @Query("DELETE FROM terms")
+    void deleteAll();
 }

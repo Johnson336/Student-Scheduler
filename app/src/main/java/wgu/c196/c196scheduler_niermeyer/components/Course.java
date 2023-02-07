@@ -1,5 +1,6 @@
 package wgu.c196.c196scheduler_niermeyer.components;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -11,6 +12,9 @@ public class Course {
     private String startDate;
     private String endDate;
     private String status;
+    private String instructorName;
+    private String instructorPhone;
+    private String instructorEmail;
     private String note;
     private int termID;
 
@@ -24,13 +28,17 @@ public class Course {
         this.endDate = endDate;
         this.status = status;
         this.note = note;
+        this.instructorName = null;
+        this.instructorPhone = null;
+        this.instructorEmail = null;
     }
-    public int getTermID() {
-        return termID;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("%d: %s (%d)", this.id, this.title, this.termID);
     }
-    public void setTermID(int termID) {
-        this.termID = termID;
-    }
+
     // Setters
     public void setId(int i) {
         this.id = i;
@@ -50,6 +58,18 @@ public class Course {
     public void setNote(String note) {
         this.note = note;
     }
+    public void setTermID(int termID) {
+        this.termID = termID;
+    }
+    public void setInstructorName(String instructorName) {
+        this.instructorName = instructorName;
+    }
+    public void setInstructorPhone(String instructorPhone) {
+        this.instructorPhone = instructorPhone;
+    }
+    public void setInstructorEmail(String instructorEmail) {
+        this.instructorEmail = instructorEmail;
+    }
     // Getters
     public int getId() {
         return this.id;
@@ -68,5 +88,17 @@ public class Course {
     }
     public String getNote() {
         return this.note;
+    }
+    public int getTermID() {
+        return termID;
+    }
+    public String getInstructorName() {
+        return instructorName;
+    }
+    public String getInstructorPhone() {
+        return instructorPhone;
+    }
+    public String getInstructorEmail() {
+        return instructorEmail;
     }
 }

@@ -19,18 +19,15 @@ import wgu.c196.c196scheduler_niermeyer.components.Term;
 import wgu.c196.c196scheduler_niermeyer.database.Repository;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static int numAlert;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button button = findViewById(R.id.button_Enter);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, TermList.class);
-                startActivity(intent);
-            }
+        button.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, TermList.class);
+            startActivity(intent);
         });
     }
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 repo.insert(term);
                 Course course = new Course("Algebra II", "2023-01-28", "2023-06-01", "ACTIVE", "No notes available for this course.");
                 repo.insert(course);
+
                 return true;
         }
         return super.onOptionsItemSelected(item);

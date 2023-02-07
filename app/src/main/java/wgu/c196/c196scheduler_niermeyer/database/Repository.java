@@ -2,218 +2,178 @@ package wgu.c196.c196scheduler_niermeyer.database;
 
 import android.app.Application;
 
-import java.util.ArrayList;
+import androidx.lifecycle.LiveData;
+import androidx.room.Database;
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import wgu.c196.c196scheduler_niermeyer.components.Assessment;
 import wgu.c196.c196scheduler_niermeyer.components.Course;
-import wgu.c196.c196scheduler_niermeyer.components.Mentor;
 import wgu.c196.c196scheduler_niermeyer.components.Term;
 import wgu.c196.c196scheduler_niermeyer.dao.AssessmentDAO;
 import wgu.c196.c196scheduler_niermeyer.dao.CourseDAO;
-import wgu.c196.c196scheduler_niermeyer.dao.MentorDAO;
 import wgu.c196.c196scheduler_niermeyer.dao.TermDAO;
 
 public class Repository {
-    private MentorDAO mMentorDAO;
     private AssessmentDAO mAssessmentDAO;
     private CourseDAO mCourseDAO;
     private TermDAO mTermDAO;
-    private List<Mentor> mAllMentors;
-    private List<Assessment> mAllAssessments;
-    private List<Course> mAllCourses;
-    private List<Term> mAllTerms;
-
-    private static int NUMBER_OF_THREADS=4;
-    static final ExecutorService databaseExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    private LiveData<List<Assessment>> mAllAssessments;
+    private LiveData<List<Course>> mAllCourses;
+    private LiveData<List<Term>> mAllTerms;
+    private LiveData<Term> selectedTerm;
+    private LiveData<List<Course>> filteredCourses;
+    private LiveData<Course> selectedCourse;
+    private LiveData<List<Assessment>> filteredAssessments;
+    private LiveData<Assessment> selectedAssessment;
+    private final int dbDelay = 50;
 
     public Repository(Application application) {
         DatabaseBuilder db = DatabaseBuilder.getDatabase(application);
-        mMentorDAO = db.mentorDAO();
         mAssessmentDAO = db.assessmentDAO();
         mCourseDAO = db.courseDAO();
         mTermDAO = db.termDAO();
+        mAllAssessments = mAssessmentDAO.getAllAssessments();
+        mAllCourses = mCourseDAO.getAllCourses();
+        mAllTerms = mTermDAO.getAllTerms();
+    }
+    private void dbDelay() {
+        try {
+            Thread.sleep(dbDelay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    private void dbDelay(int delay) {
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Terms
      */
-    public List<Term> getAllTerms() {
-        databaseExecutor.execute(()->{
-            mAllTerms = mTermDAO.getAllTerms();
-        });
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public LiveData<List<Term>> getAllTerms() {
         return mAllTerms;
     }
     public void insert(Term term) {
-        databaseExecutor.execute(()->{
+        DatabaseBuilder.databaseExecutor.execute(()->{
             mTermDAO.insert(term);
         });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        // dbDelay();
+    }
+    public LiveData<Term> getTermByID(int i) {
+        DatabaseBuilder.databaseExecutor.execute(()->{
+            selectedTerm = mTermDAO.getTermByID(i);
+        });
+        return selectedTerm;
     }
     public void update(Term term) {
-        databaseExecutor.execute(()->{
+        DatabaseBuilder.databaseExecutor.execute(()->{
             mTermDAO.update(term);
         });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        //dbDelay();
     }
     public void delete(Term term) {
-        databaseExecutor.execute(()->{
+        DatabaseBuilder.databaseExecutor.execute(()->{
             mTermDAO.delete(term);
         });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        //dbDelay();
+    }
+    public void deleteAllTerms() {
+        DatabaseBuilder.databaseExecutor.execute(()->{
+            mTermDAO.deleteAll();
+        });
+        //dbDelay();
     }
 
     /**
      * Courses
      */
-    public List<Course> getAllCourses() {
-        databaseExecutor.execute(()->{
-            mAllCourses = mCourseDAO.getAllCourses();
-        });
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public LiveData<List<Course>> getAllCourses() {
         return mAllCourses;
     }
     public void insert(Course course) {
-        databaseExecutor.execute(()->{
+        DatabaseBuilder.databaseExecutor.execute(()->{
             mCourseDAO.insert(course);
         });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        //dbDelay();
+    }
+    public LiveData<List<Course>> getCoursesByTermID(int i) {
+        DatabaseBuilder.databaseExecutor.execute(()->{
+            filteredCourses = mCourseDAO.getAllCoursesByTermID(i);
+        });
+        return filteredCourses;
+    }
+    public LiveData<Course> getCourseByID(int i) {
+        DatabaseBuilder.databaseExecutor.execute(()->{
+            selectedCourse = mCourseDAO.getCourseByID(i);
+        });
+        return selectedCourse;
     }
     public void update(Course course) {
-        databaseExecutor.execute(()->{
+        DatabaseBuilder.databaseExecutor.execute(()->{
             mCourseDAO.update(course);
         });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        //dbDelay();
     }
     public void delete(Course course) {
-        databaseExecutor.execute(()->{
+        DatabaseBuilder.databaseExecutor.execute(()->{
             mCourseDAO.delete(course);
         });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        //dbDelay();
+    }
+    public void deleteAllCourses() {
+        DatabaseBuilder.databaseExecutor.execute(()->{
+            mCourseDAO.deleteAll();
+        });
+        //dbDelay();
     }
 
     /**
      * Assessments
      */
-    public List<Assessment> getAllAssessments() {
-        databaseExecutor.execute(()->{
-            mAllAssessments = mAssessmentDAO.getAllAssessments();
-        });
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public LiveData<List<Assessment>> getAllAssessments() {
         return mAllAssessments;
     }
     public void insert(Assessment assessment) {
-        databaseExecutor.execute(()->{
+        DatabaseBuilder.databaseExecutor.execute(()->{
             mAssessmentDAO.insert(assessment);
         });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        //dbDelay();
+    }
+    public LiveData<List<Assessment>> getAssessmentsByCourseID(int i) {
+        DatabaseBuilder.databaseExecutor.execute(()->{
+            filteredAssessments = mAssessmentDAO.getAllAssessmentsByCourseID(i);
+        });
+        return filteredAssessments;
+    }
+    public LiveData<Assessment> getAssessmentByID(int i) {
+        DatabaseBuilder.databaseExecutor.execute(()->{
+            selectedAssessment = mAssessmentDAO.getAssessmentByID(i);
+        });
+    return selectedAssessment;
     }
     public void update(Assessment assessment) {
-        databaseExecutor.execute(()->{
+        DatabaseBuilder.databaseExecutor.execute(()->{
             mAssessmentDAO.update(assessment);
         });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        //dbDelay();
     }
     public void delete(Assessment assessment) {
-        databaseExecutor.execute(()->{
+        DatabaseBuilder.databaseExecutor.execute(()->{
             mAssessmentDAO.delete(assessment);
         });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        //dbDelay();
     }
-
-    /**
-     * Mentors
-     */
-    public List<Mentor> getAllMentors() {
-        databaseExecutor.execute(()->{
-            mAllMentors = mMentorDAO.getAllMentors();
+    public void deleteAllAssessments() {
+        DatabaseBuilder.databaseExecutor.execute(()->{
+            mAssessmentDAO.deleteAll();
         });
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return mAllMentors;
-    }
-    public void insert(Mentor mentor) {
-        databaseExecutor.execute(()->{
-            mMentorDAO.insert(mentor);
-        });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    public void update(Mentor mentor) {
-        databaseExecutor.execute(()->{
-            mMentorDAO.update(mentor);
-        });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    public void delete(Mentor mentor) {
-        databaseExecutor.execute(()->{
-            mMentorDAO.delete(mentor);
-        });
-        try {
-            Thread.sleep(100);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        //dbDelay();
     }
 }

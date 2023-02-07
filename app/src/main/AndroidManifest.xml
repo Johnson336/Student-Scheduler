@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -9,16 +10,34 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.C196SchedulerNiermeyer"
-        tools:targetApi="31">
+        android:theme="@style/AppTheme"
+        tools:targetApi="33">
+        <receiver
+            android:name=".activities.NotificationReceiver"
+            android:enabled="true"
+            android:exported="false" />
         <activity
-            android:name=".activities.TermDetails"
+            android:name=".activities.AssessmentDetails"
             android:exported="false"
+            android:noHistory="true"
+            android:label="Assessment Details"
+            android:parentActivityName=".activities.AssessmentList" />
+        <activity
+            android:name=".activities.AssessmentList"
+            android:exported="false"
+            android:noHistory="true"
+            android:label="Course Details"
+            android:parentActivityName=".activities.CourseList" />
+        <activity
+            android:name=".activities.CourseList"
+            android:exported="false"
+            android:noHistory="true"
             android:label="Term Details"
             android:parentActivityName=".activities.TermList" />
         <activity
             android:name=".activities.TermList"
             android:exported="false"
+            android:noHistory="true"
             android:label="Term List"
             android:parentActivityName=".activities.MainActivity" />
         <activity
