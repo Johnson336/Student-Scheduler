@@ -8,10 +8,9 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="229dp"
-        android:layout_height="274dp"
-        android:layout_marginTop="91dp"
-        android:layout_marginBottom="32dp"
+        android:layout_width="87dp"
+        android:layout_height="125dp"
+        android:layout_marginTop="30dp"
         android:autoSizeTextType="uniform"
         android:text="@string/wgu_c196_task_1"
         android:textAlignment="center"
@@ -23,29 +22,30 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="127dp"
-        android:layout_height="119dp"
+        android:layout_width="56dp"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="32dp"
+        android:contentDescription="@string/schoolhouse_logo"
         android:src="@drawable/baseline_account_balance_24"
         app:layout_constraintBottom_toTopOf="@+id/button_Enter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        android:contentDescription="@string/schoolhouse_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/button_Enter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="10dp"
         android:clickable="true"
         android:text="@string/let_s_go"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
