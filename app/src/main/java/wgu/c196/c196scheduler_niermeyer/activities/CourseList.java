@@ -3,6 +3,7 @@ package wgu.c196.c196scheduler_niermeyer.activities;
 import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -117,10 +118,11 @@ public class CourseList extends AppCompatActivity {
                         Toast.makeText(CourseList.this, "Deleting " +
                                 thisCourse.getTitle(), Toast.LENGTH_LONG).show();
 
-                        // Delete the term
-                        mCourseViewModel.delete(thisCourse);
-                        filteredCourses.remove(thisCourse);
-                        courseAdapter.notifyDataSetChanged();
+                        // Delete the course
+                        repo.delete(thisCourse);
+                        List<Course> filteredCourses = repo.getCoursesByTermID(tId);
+                        courseAdapter.setCourses(filteredCourses);
+                        courseAdapter.notifyItemInserted(filteredCourses.size());
                     }
                 });
         helper.attachToRecyclerView(recyclerView);
@@ -144,7 +146,7 @@ public class CourseList extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            new DatePickerDialog(CourseList.this, termStartDate, calStart.get(Calendar.YEAR), calStart.get(Calendar.MONTH), calStart.get(Calendar.DAY_OF_MONTH)).show();
+            new DatePickerDialog(CourseList.this, R.style.DialogTheme, termStartDate, calStart.get(Calendar.YEAR), calStart.get(Calendar.MONTH), calStart.get(Calendar.DAY_OF_MONTH)).show();
         });
         termStartDate = (view, year, monthOfYear, dayOfMonth) -> {
             calStart.set(Calendar.YEAR, year);
@@ -161,7 +163,7 @@ public class CourseList extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            new DatePickerDialog(CourseList.this, termEndDate, calEnd.get(Calendar.YEAR), calEnd.get(Calendar.MONTH), calEnd.get(Calendar.DAY_OF_MONTH)).show();
+            new DatePickerDialog(CourseList.this, R.style.DialogTheme, termEndDate, calEnd.get(Calendar.YEAR), calEnd.get(Calendar.MONTH), calEnd.get(Calendar.DAY_OF_MONTH)).show();
         });
         termEndDate = (view, year, monthOfYear, dayOfMonth) -> {
             calEnd.set(Calendar.YEAR, year);
@@ -185,13 +187,15 @@ public class CourseList extends AppCompatActivity {
 
         ExtendedFloatingActionButton button_course_add = findViewById(R.id.button_addCourse);
         button_course_add.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, android.R.style.Widget_Material_Light_PopupWindow));
             builder.setTitle("Enter Course Title");
+            builder.setIcon(R.drawable.ic_launcher_foreground);
 
             // Set up the course title input
             final EditText input = new EditText(this);
+            input.setHint("New Course Title");
             // Specify the type of input expected
-            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
             builder.setView(input);
 
             // Set up the buttons

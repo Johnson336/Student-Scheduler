@@ -5,6 +5,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,12 +23,16 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, intent.getStringExtra("key"), Toast.LENGTH_LONG).show();
         createNotificationChannel(context, channelId);
-        Notification n = new NotificationCompat.Builder(context, channelId)
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        NotificationCompat.Builder n = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentText(intent.getStringExtra("key"))
-                .setContentTitle("C196 Scheduler Notification").build();
+                .setContentTitle("C196 Scheduler Notification")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
         NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        manager.notify(notificationID++, n);
+        manager.notify(notificationID++, n.build());
     }
 
     private void createNotificationChannel(Context context, String channelId) {
@@ -39,4 +44,5 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
     }
+
 }

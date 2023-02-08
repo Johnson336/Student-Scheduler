@@ -3,6 +3,7 @@ package wgu.c196.c196scheduler_niermeyer.activities;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -128,10 +130,11 @@ public class AssessmentList extends AppCompatActivity {
                         Toast.makeText(AssessmentList.this, "Deleting " +
                                 thisAssessment.getTitle(), Toast.LENGTH_LONG).show();
 
-                        // Delete the term
-                        mAssessmentViewModel.delete(thisAssessment);
-                        filteredAssessments.remove(thisAssessment);
-                        assessmentAdapter.notifyItemRemoved(position);
+                        // Delete the assessment
+                        repo.delete(thisAssessment);
+                        List<Assessment> filteredAssessments = repo.getAssessmentsByCourseID(cId);
+                        assessmentAdapter.setAssessments(filteredAssessments);
+                        assessmentAdapter.notifyItemInserted(filteredAssessments.size());
                     }
                 });
         helper.attachToRecyclerView(recyclerView);
@@ -166,7 +169,7 @@ public class AssessmentList extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            new DatePickerDialog(AssessmentList.this, courseStartDate, calStart.get(Calendar.YEAR), calStart.get(Calendar.MONTH), calStart.get(Calendar.DAY_OF_MONTH)).show();
+            new DatePickerDialog(AssessmentList.this, R.style.DialogTheme, courseStartDate, calStart.get(Calendar.YEAR), calStart.get(Calendar.MONTH), calStart.get(Calendar.DAY_OF_MONTH)).show();
         });
         courseStartDate = (view, year, monthOfYear, dayOfMonth) -> {
             calStart.set(Calendar.YEAR, year);
@@ -186,7 +189,7 @@ public class AssessmentList extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            new DatePickerDialog(AssessmentList.this, courseEndDate, calEnd.get(Calendar.YEAR), calEnd.get(Calendar.MONTH), calEnd.get(Calendar.DAY_OF_MONTH)).show();
+            new DatePickerDialog(AssessmentList.this, R.style.DialogTheme, courseEndDate, calEnd.get(Calendar.YEAR), calEnd.get(Calendar.MONTH), calEnd.get(Calendar.DAY_OF_MONTH)).show();
         });
         courseEndDate = (view, year, monthOfYear, dayOfMonth) -> {
             calEnd.set(Calendar.YEAR, year);
@@ -227,13 +230,16 @@ public class AssessmentList extends AppCompatActivity {
 
         ExtendedFloatingActionButton button_assessment_add = findViewById(R.id.button_addAssessment);
         button_assessment_add.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, android.R.style.Widget_Material_Light_PopupWindow));
             builder.setTitle("Enter Assessment Title");
+
+            builder.setIcon(R.drawable.ic_launcher_foreground);
 
             // Set up the course title input
             final EditText input = new EditText(this);
+            input.setHint("New Assessment Title");
             // Specify the type of input expected
-            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
             builder.setView(input);
 
             // Set up the buttons
@@ -271,6 +277,7 @@ public class AssessmentList extends AppCompatActivity {
                 startActivity(shareIntent);
                 return true;
             case R.id.notifyStart:
+
                 String date = courseStart.getText().toString();
                 Date newDate = null;
                 try {
@@ -282,10 +289,11 @@ public class AssessmentList extends AppCompatActivity {
                 }
                 Long trigger = newDate.getTime();
                 Intent intent = new Intent(AssessmentList.this, NotificationReceiver.class);
-                intent.putExtra("key", String.format(Locale.US, "%s begins on %s!", courseTitle.getText().toString(),courseStart.getText().toString()));
+                intent.putExtra("key", String.format(Locale.US, "%s starts on %s!", courseTitle.getText().toString(),courseStart.getText().toString()));
                 PendingIntent sender = PendingIntent.getBroadcast(AssessmentList.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
                 AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 manager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
+
                 return true;
             case R.id.notifyEnd:
                 date = courseEnd.getText().toString();

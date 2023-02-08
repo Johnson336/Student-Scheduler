@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -99,13 +100,15 @@ public class TermList extends AppCompatActivity {
 
         ExtendedFloatingActionButton button_term_add = findViewById(R.id.button_addTerm);
         button_term_add.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, android.R.style.Widget_Material_Light_PopupWindow));
             builder.setTitle("Enter Term Name");
+            builder.setIcon(R.drawable.ic_launcher_foreground);
 
             // Set up the course title input
             final EditText input = new EditText(this);
+            input.setHint("New Term Name");
             // Specify the type of input expected
-            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
             builder.setView(input);
 
             // Set up the buttons

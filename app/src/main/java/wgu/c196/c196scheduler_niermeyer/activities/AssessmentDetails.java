@@ -74,7 +74,7 @@ public class AssessmentDetails extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            new DatePickerDialog(AssessmentDetails.this, assessmentStartDate, calStart.get(Calendar.YEAR), calStart.get(Calendar.MONTH), calStart.get(Calendar.DAY_OF_MONTH)).show();
+            new DatePickerDialog(AssessmentDetails.this, R.style.DialogTheme, assessmentStartDate, calStart.get(Calendar.YEAR), calStart.get(Calendar.MONTH), calStart.get(Calendar.DAY_OF_MONTH)).show();
             });
         assessmentStartDate = (view, year, monthOfYear, dayOfMonth) -> {
             calStart.set(Calendar.YEAR, year);
@@ -91,7 +91,7 @@ public class AssessmentDetails extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            new DatePickerDialog(AssessmentDetails.this, assessmentEndDate, calEnd.get(Calendar.YEAR), calEnd.get(Calendar.MONTH), calEnd.get(Calendar.DAY_OF_MONTH)).show();
+            new DatePickerDialog(AssessmentDetails.this, R.style.DialogTheme, assessmentEndDate, calEnd.get(Calendar.YEAR), calEnd.get(Calendar.MONTH), calEnd.get(Calendar.DAY_OF_MONTH)).show();
         });
         assessmentEndDate = (view, year, monthOfYear, dayOfMonth) -> {
             calEnd.set(Calendar.YEAR, year);
@@ -133,7 +133,7 @@ public class AssessmentDetails extends AppCompatActivity {
                 }
                 Long trigger = newDate.getTime();
                 Intent intent = new Intent(AssessmentDetails.this, NotificationReceiver.class);
-                intent.putExtra("key", String.format(Locale.US, "%s ends on %s!", assessmentTitle.getText().toString(),assessmentStart.getText().toString()));
+                intent.putExtra("key", String.format(Locale.US, "%s starts on %s!", assessmentTitle.getText().toString(),assessmentStart.getText().toString()));
                 PendingIntent sender = PendingIntent.getBroadcast(AssessmentDetails.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
                 AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 manager.set(AlarmManager.RTC_WAKEUP, trigger, sender);

@@ -33,4 +33,13 @@
     <string name="new_assessment">Add Assessment</string>
     <string name="delete_assessment_word">Delete an assessment</string>
     <string name="delete_assessment">Delete Assessment</string>
+    <string name="save_term">Save Term</string>
+    <string name="courses">Courses</string>
+    <string name="assessment_title">Assessment Title</string>
+    <string name="assessment_start">Assessment Start</string>
+    <string name="assessment_end">Assessment End</string>
+    <string name="save_assessment">Save Assessment</string>
+    <string name="wgu_c196_task_1">WGU C196 Task 1</string>
+    <string name="schoolhouse_logo">Schoolhouse Logo</string>
+    <string name="let_s_go">Let\'s Go</string>
 </resources>

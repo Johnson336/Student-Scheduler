@@ -18,63 +18,64 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/term_name" />
+
+            <EditText
+                android:id="@+id/editText_term_detail_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:autofillHints="name"
+                android:hint="@string/term_name"
+                android:inputType="textCapWords" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Term Name" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/term_start" />
 
-                <EditText
-                    android:id="@+id/editText_term_detail_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Term Name" />
+            <EditText
+                android:id="@+id/editText_term_detail_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="date"
+                android:drawableEnd="@drawable/baseline_edit_calendar_24"
+                android:hint="@string/term_start"
+                android:inputType="date" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Term Start" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/term_end" />
 
-                <EditText
-                    android:id="@+id/editText_term_detail_start"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:hint="Term Start" />
+            <EditText
+                android:id="@+id/editText_term_detail_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="date"
+                android:drawableEnd="@drawable/baseline_edit_calendar_24"
+                android:hint="@string/term_end"
+                android:inputType="date" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Term End" />
+            <TextView
+                style="@style/item_header"
+                android:text="@string/courses" />
 
-                <EditText
-                    android:id="@+id/editText_term_detail_end"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:hint="Term End" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_courseList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                <TextView
-                    style="@style/item_header"
-                    android:text="Courses" />
+            <Button
+                android:id="@+id/button_term_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:text="@string/save_term" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView_courseList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <Button
-                    android:id="@+id/button_term_save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:clickable="true"
-                    android:text="Save Term" />
-
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

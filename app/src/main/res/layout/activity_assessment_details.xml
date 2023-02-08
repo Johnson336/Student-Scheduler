@@ -18,54 +18,55 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/assessment_title" />
+
+            <EditText
+                android:id="@+id/editText_assessment_detail_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:hint="@string/assessment_title"
+                android:autofillHints="none"
+                android:inputType="textCapWords" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Assessment Title" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/assessment_start" />
 
-                <EditText
-                    android:id="@+id/editText_assessment_detail_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Assessment Title" />
+            <EditText
+                android:id="@+id/editText_assessment_detail_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/baseline_edit_calendar_24"
+                android:hint="@string/assessment_start"
+                android:autofillHints="date"
+                android:inputType="date" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Assessment Start" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/assessment_end" />
 
-                <EditText
-                    android:id="@+id/editText_assessment_detail_start"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:hint="Assessment Start" />
+            <EditText
+                android:id="@+id/editText_assessment_detail_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/baseline_edit_calendar_24"
+                android:hint="@string/assessment_end"
+                android:autofillHints="date"
+                android:inputType="date" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Assessment End" />
+            <Button
+                android:id="@+id/button_assessment_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:text="@string/save_assessment" />
 
-                <EditText
-                    android:id="@+id/editText_assessment_detail_end"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:hint="Assessment End" />
-                <Button
-                    android:id="@+id/button_assessment_save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:clickable="true"
-                    android:text="Save Assessment" />
-
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

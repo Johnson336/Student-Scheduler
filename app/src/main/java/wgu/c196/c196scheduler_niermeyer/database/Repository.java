@@ -28,7 +28,7 @@ public class Repository {
     private Course selectedCourse;
     private List<Assessment> filteredAssessments;
     private Assessment selectedAssessment;
-    private final int dbDelay = 50;
+    private final int dbDelay = 100;
 
     public Repository(Application application) {
         DatabaseBuilder db = DatabaseBuilder.getDatabase(application);

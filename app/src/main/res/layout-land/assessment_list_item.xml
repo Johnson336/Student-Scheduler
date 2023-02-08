@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="2dp"
+    >
+
+    <TextView
+        android:id="@+id/assessment_list_item"
+        style="@style/list_item" />
+
+    <Button
+        android:id="@+id/assessment_item_info_graphic"
+        style="?attr/materialIconButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/assessment_detail_button"
+        app:icon="@drawable/baseline_edit_24" />
+
+    <!-- Button
+        android:id="@+id/assessment_item_delete_graphic"
+        style="?attr/materialIconButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/assessment_delete_button"
+        app:icon="@drawable/baseline_close_24" -->
+
+</LinearLayout>
