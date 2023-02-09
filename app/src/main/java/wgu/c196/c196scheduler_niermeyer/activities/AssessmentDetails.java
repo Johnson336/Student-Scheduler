@@ -67,7 +67,6 @@ public class AssessmentDetails extends AppCompatActivity {
         String aStart = pref.getString("assessmentStart", null);
         String aEnd = pref.getString("assessmentEnd", null);
         int cId = pref.getInt("courseId", 0);
-        System.err.println("aType: " + aType);
 
         assessmentTitle.setText((aTitle!=null ? aTitle : ""));
         // Selects Performance if aType is 1
