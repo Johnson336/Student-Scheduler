@@ -25,11 +25,31 @@
 
             <EditText
                 android:id="@+id/editText_assessment_detail_title"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/assessment_title"
                 android:autofillHints="none"
                 android:inputType="textCapWords" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/assessment_type" />
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/radio_performance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/performance" />
+                <RadioButton
+                    android:id="@+id/radio_objective"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/objective" />
+            </RadioGroup>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,6 +58,7 @@
 
             <EditText
                 android:id="@+id/editText_assessment_detail_start"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/baseline_edit_calendar_24"
@@ -52,6 +73,7 @@
 
             <EditText
                 android:id="@+id/editText_assessment_detail_end"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/baseline_edit_calendar_24"

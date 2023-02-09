@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,8 @@ import wgu.c196.c196scheduler_niermeyer.database.Repository;
 
 public class AssessmentDetails extends AppCompatActivity {
     private EditText assessmentTitle;
+    private RadioButton assessmentPerformance;
+    private RadioButton assessmentObjective;
     private EditText assessmentStart;
     private DatePickerDialog.OnDateSetListener assessmentStartDate;
     private final Calendar calStart = Calendar.getInstance();
@@ -48,6 +51,8 @@ public class AssessmentDetails extends AppCompatActivity {
         repo = new Repository(getApplication());
 
         assessmentTitle = findViewById(R.id.editText_assessment_detail_title);
+        assessmentPerformance = findViewById(R.id.radio_performance);
+        assessmentObjective = findViewById(R.id.radio_objective);
         assessmentStart = findViewById(R.id.editText_assessment_detail_start);
         assessmentEnd = findViewById(R.id.editText_assessment_detail_end);
         assessmentSave = findViewById(R.id.button_assessment_save);
@@ -58,11 +63,17 @@ public class AssessmentDetails extends AppCompatActivity {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         int aId = pref.getInt("assessmentId", 0);
         String aTitle = pref.getString("assessmentTitle", null);
+        int aType = pref.getInt("assessmentType", 0);
         String aStart = pref.getString("assessmentStart", null);
         String aEnd = pref.getString("assessmentEnd", null);
         int cId = pref.getInt("courseId", 0);
+        System.err.println("aType: " + aType);
 
         assessmentTitle.setText((aTitle!=null ? aTitle : ""));
+        // Selects Performance if aType is 1
+        assessmentPerformance.setChecked(aType==1);
+        // Selects Objective if aType is 2
+        assessmentObjective.setChecked(aType==2);
         assessmentStart.setText((aStart!=null ? aStart : ""));
         assessmentEnd.setText((aEnd!=null ? aEnd : ""));
 
@@ -102,7 +113,8 @@ public class AssessmentDetails extends AppCompatActivity {
         };
 
         assessmentSave.setOnClickListener(v -> {
-            Assessment newAssessment = new Assessment(assessmentTitle.getText().toString(), assessmentStart.getText().toString(), assessmentEnd.getText().toString());
+            int type = (assessmentPerformance.isChecked() ? 1 : assessmentObjective.isChecked() ? 2 : 0);
+            Assessment newAssessment = new Assessment(assessmentTitle.getText().toString(), type, assessmentStart.getText().toString(), assessmentEnd.getText().toString());
             newAssessment.setCourseID(cId);
             if (aId != 0) {
                 newAssessment.setId(aId);

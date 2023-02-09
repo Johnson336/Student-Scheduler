@@ -53,6 +53,7 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
                     SharedPreferences.Editor prefEdit = pref.edit();
                     prefEdit.putInt("assessmentId", cur.getId());
                     prefEdit.putString("assessmentTitle", cur.getTitle());
+                    prefEdit.putInt("assessmentType", cur.getType());
                     prefEdit.putString("assessmentStart", cur.getStartDate());
                     prefEdit.putString("assessmentEnd", cur.getEndDate());
                     prefEdit.apply();

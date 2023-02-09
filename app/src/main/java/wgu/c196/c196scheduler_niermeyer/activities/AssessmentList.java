@@ -246,7 +246,7 @@ public class AssessmentList extends AppCompatActivity {
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Assessment newAssessment = new Assessment(input.getText().toString(), "", "");
+                    Assessment newAssessment = new Assessment(input.getText().toString(), 0,"", "");
                     newAssessment.setCourseID(cId);
                     repo.insert(newAssessment);
                     List<Assessment> filteredAssessments = repo.getAssessmentsByCourseID(cId);

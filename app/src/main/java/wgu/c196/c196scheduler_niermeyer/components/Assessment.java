@@ -11,6 +11,7 @@ public class Assessment {
     @PrimaryKey(autoGenerate=true)
     private int id;
     private String title;
+    private int type;
     private String startDate;
     private String endDate;
     private int courseID;
@@ -18,8 +19,9 @@ public class Assessment {
     public Assessment() {
 
     }
-    public Assessment(String title, String startDate, String endDate) {
+    public Assessment(String title, int type, String startDate, String endDate) {
         this.id = 0;
+        this.type = type;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -44,6 +46,7 @@ public class Assessment {
     public void setTitle(String title) {
         this.title = title;
     }
+    public void setType(int type) { this.type = type; }
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
@@ -57,6 +60,7 @@ public class Assessment {
     public String getTitle() {
         return this.title;
     }
+    public int getType() { return this.type; }
     public String getStartDate() {
         return this.startDate;
     }

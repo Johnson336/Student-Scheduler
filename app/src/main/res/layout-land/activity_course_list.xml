@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:textCursorDrawable="@drawable/color_cursor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.CourseList">
@@ -25,6 +26,7 @@
 
             <EditText
                 android:id="@+id/editText_term_detail_name"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="name"
@@ -38,6 +40,7 @@
 
             <EditText
                 android:id="@+id/editText_term_detail_start"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="date"
@@ -52,6 +55,7 @@
 
             <EditText
                 android:id="@+id/editText_term_detail_end"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="date"

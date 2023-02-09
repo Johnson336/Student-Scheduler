@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:textCursorDrawable="@drawable/color_cursor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.AssessmentList">
@@ -25,6 +26,7 @@
 
             <EditText
                 android:id="@+id/editText_course_detail_title"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/course_detail_title"
@@ -38,6 +40,7 @@
 
             <EditText
                 android:id="@+id/editText_course_detail_start"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/baseline_edit_calendar_24"
@@ -52,6 +55,7 @@
 
             <EditText
                 android:id="@+id/editText_course_detail_end"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/baseline_edit_calendar_24"
@@ -66,11 +70,12 @@
 
             <EditText
                 android:id="@+id/editText_course_detail_status"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/course_detail_status"
-                android:autofillHints="date"
-                android:inputType="date" />
+                android:autofillHints="none"
+                android:inputType="textCapSentences" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,6 +84,7 @@
 
             <EditText
                 android:id="@+id/editText_course_detail_note"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/course_detail_note"
@@ -92,6 +98,7 @@
 
             <EditText
                 android:id="@+id/editText_course_instructor_name"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/course_detail_instructor_name"
@@ -105,6 +112,7 @@
 
             <EditText
                 android:id="@+id/editText_course_instructor_phone"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/course_detail_instructor_phone"
@@ -118,6 +126,7 @@
 
             <EditText
                 android:id="@+id/editText_course_instructor_email"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/course_detail_instructor_email"

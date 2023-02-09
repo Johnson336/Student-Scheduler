@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 repo.insert(term);
                 Course course = new Course("Algebra II", "2023/01/28", "2023/06/01", "ACTIVE", "No notes available for this course.");
                 repo.insert(course);
-                Assessment assessment = new Assessment("Final Exam", "2023/02/01", "2023/02/01");
+                Assessment assessment = new Assessment("Final Exam",2,"2023/02/01", "2023/02/01");
                 repo.insert(assessment);
                 break;
         }

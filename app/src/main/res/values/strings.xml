@@ -42,4 +42,7 @@
     <string name="wgu_c196_task_1">WGU C196 Task 1</string>
     <string name="schoolhouse_logo">Schoolhouse Logo</string>
     <string name="let_s_go">Let\'s Go</string>
+    <string name="assessment_type">Assessment Type</string>
+    <string name="performance">Performance</string>
+    <string name="objective">Objective</string>
 </resources>
